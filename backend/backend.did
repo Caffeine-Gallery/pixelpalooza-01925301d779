@@ -1,0 +1,10 @@
+type Image = 
+ record {
+   content: blob;
+   id: nat;
+   timestamp: int;
+ };
+service : {
+  getImages: () -> (vec Image) query;
+  uploadImage: (blob) -> (nat);
+}
