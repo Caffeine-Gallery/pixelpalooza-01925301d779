@@ -38,6 +38,12 @@ button:hover {
     background-color: #45a049;
 }
 
+#uploadStatus {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
 #gallery {
     display: flex;
     flex-wrap: wrap;

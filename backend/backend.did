@@ -1,3 +1,8 @@
+type UploadResult = 
+ variant {
+   err: text;
+   ok: nat;
+ };
 type Image = 
  record {
    content: blob;
@@ -6,5 +11,5 @@ type Image =
  };
 service : {
   getImages: () -> (vec Image) query;
-  uploadImage: (blob) -> (nat);
+  uploadImage: (blob) -> (UploadResult);
 }
