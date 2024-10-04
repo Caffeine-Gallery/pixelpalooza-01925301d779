@@ -33,7 +33,7 @@ uploadForm.addEventListener('submit', async (e) => {
       if ('ok' in result) {
         uploadStatus.textContent = 'Upload successful!';
         imageInput.value = '';
-        loadImages();
+        await loadImages();
       } else {
         uploadStatus.textContent = `Upload failed: ${result.err}`;
       }
@@ -49,10 +49,19 @@ async function loadImages() {
     const images = await backend.getImages();
     gallery.innerHTML = '';
     images.forEach((image) => {
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'image-container';
+
       const img = document.createElement('img');
       img.src = URL.createObjectURL(new Blob([new Uint8Array(image.content)]));
       img.alt = `Image ${image.id}`;
-      gallery.appendChild(img);
+      
+      const timestamp = document.createElement('p');
+      timestamp.textContent = new Date(Number(image.timestamp) / 1000000).toLocaleString();
+
+      imgContainer.appendChild(img);
+      imgContainer.appendChild(timestamp);
+      gallery.appendChild(imgContainer);
     });
   } catch (error) {
     console.error('Error loading images:', error);
@@ -60,4 +69,5 @@ async function loadImages() {
   }
 }
 
+// Load images when the page loads
 loadImages();
