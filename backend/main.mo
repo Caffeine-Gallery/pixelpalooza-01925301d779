@@ -36,6 +36,6 @@ actor {
   };
 
   public query func getImages() : async [Image] {
-    images
+    Array.reverse(images)
   };
 }
