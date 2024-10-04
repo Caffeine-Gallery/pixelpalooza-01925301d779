@@ -11,5 +11,5 @@ type Image =
  };
 service : {
   getImages: () -> (vec Image) query;
-  uploadImage: (blob) -> (UploadResult);
+  uploadImage: (vec nat8) -> (UploadResult);
 }

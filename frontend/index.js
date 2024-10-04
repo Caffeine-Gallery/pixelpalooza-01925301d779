@@ -1,19 +1,12 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
+import { idlFactory } from './declarations/backend/backend.did.js';
 
 const agent = new HttpAgent();
 const canisterId = process.env.BACKEND_CANISTER_ID;
 
-// Placeholder for the actual interface
-const idlFactory = ({ IDL }) => {
-  return IDL.Service({
-    'uploadImage': IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Variant({ 'ok': IDL.Nat, 'err': IDL.Text })], []),
-    'getImages': IDL.Func([], [IDL.Vec(IDL.Record({
-      'id': IDL.Nat,
-      'content': IDL.Vec(IDL.Nat8),
-      'timestamp': IDL.Int
-    }))], ['query']),
-  });
-};
+if (!canisterId) {
+  console.error('Backend canister ID is not set. Please check your environment variables.');
+}
 
 const backend = Actor.createActor(idlFactory, { agent, canisterId });
 
@@ -29,7 +22,8 @@ uploadForm.addEventListener('submit', async (e) => {
     uploadStatus.textContent = 'Uploading...';
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const result = await backend.uploadImage(Array.from(new Uint8Array(arrayBuffer)));
+      const uint8Array = new Uint8Array(arrayBuffer);
+      const result = await backend.uploadImage(Array.from(uint8Array));
       if ('ok' in result) {
         uploadStatus.textContent = 'Upload successful!';
         imageInput.value = '';

@@ -1,4 +1,5 @@
 import Int "mo:base/Int";
+import Nat8 "mo:base/Nat8";
 import Text "mo:base/Text";
 
 import Array "mo:base/Array";
@@ -19,14 +20,14 @@ actor {
   stable var imageId: Nat = 0;
   stable var images: [Image] = [];
 
-  public func uploadImage(imageBlob: Blob) : async UploadResult {
-    if (Blob.toArray(imageBlob).size() == 0) {
+  public func uploadImage(imageData: [Nat8]) : async UploadResult {
+    if (imageData.size() == 0) {
       return #err("Empty file");
     };
 
     let newImage: Image = {
       id = imageId;
-      content = imageBlob;
+      content = Blob.fromArray(imageData);
       timestamp = Time.now();
     };
     images := Array.append(images, [newImage]);
